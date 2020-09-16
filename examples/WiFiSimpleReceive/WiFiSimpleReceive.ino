@@ -17,6 +17,8 @@
   #include <WiFi101.h>
 #elif defined(ARDUINO_ESP8266_ESP12)
   #include <ESP8266WiFi.h>
+#elif defined(ARDUINO_ARCH_ESP32)
+  #include <WiFi.h>
 #endif
 
 #include "arduino_secrets.h"
@@ -47,10 +49,11 @@ void setup() {
   // attempt to connect to Wifi network:
   Serial.print("Attempting to connect to WPA SSID: ");
   Serial.println(ssid);
-  while (WiFi.begin(ssid, pass) != WL_CONNECTED) {
-    // failed, retry
-    Serial.print(".");
-    delay(5000);
+  WiFi.begin(ssid, pass);
+  
+  while (WiFi.status() != WL_CONNECTED) {
+      delay(500);
+      Serial.print(".");
   }
 
   Serial.println("You're connected to the network");
